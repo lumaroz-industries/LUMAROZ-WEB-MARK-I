@@ -35,7 +35,33 @@ main,.nav,footer{position:relative;z-index:2}.hero-content,.chapter,.split,.ren,
 .service h3,.split-title,.chapter-title,.cta h2{transition:letter-spacing .45s cubic-bezier(.16,1,.3,1)}.service:hover h3{letter-spacing:-.02em}
 @media(max-width:800px){#particle-field{opacity:.35}.scene-tag{right:16px;bottom:16px}}
 </style></head>
-<body><canvas id="particle-field"></canvas><div class="scene-tag mono"><i></i><span id="scene-label">SYSTEM / ONLINE</span></div>
+<body><canvas id="particle-field"></canvas><canvas id="webgl-scene" aria-hidden="true"></canvas>
+<style>
+#webgl-scene{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:.72;mix-blend-mode:screen}
+</style>
+<script type="module">
+import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js';
+const canvas=document.getElementById('webgl-scene');
+const renderer=new THREE.WebGLRenderer({canvas,alpha:true,antialias:true,powerPreference:'high-performance'});
+renderer.setPixelRatio(Math.min(devicePixelRatio,1.7));renderer.setSize(innerWidth,innerHeight);renderer.setClearColor(0,0);
+const scene=new THREE.Scene();const camera=new THREE.PerspectiveCamera(48,innerWidth/innerHeight,.1,100);camera.position.set(0,0,8);
+const group=new THREE.Group();scene.add(group);
+const geo=new THREE.IcosahedronGeometry(2.25,3);
+const mat=new THREE.MeshBasicMaterial({color:0x8b5cf6,wireframe:true,transparent:true,opacity:.075});
+const shell=new THREE.Mesh(geo,mat);group.add(shell);
+const coreGeo=new THREE.IcosahedronGeometry(1.05,2);
+const coreMat=new THREE.MeshBasicMaterial({color:0xd8ff3e,wireframe:true,transparent:true,opacity:.13});
+const core=new THREE.Mesh(coreGeo,coreMat);group.add(core);
+const rings=[];
+for(let i=0;i<4;i++){const r=new THREE.Mesh(new THREE.TorusGeometry(2.6+i*.34,.006+i*.003,8,160),new THREE.MeshBasicMaterial({color:i%2?0x65e7ff:0xd8ff3e,transparent:true,opacity:.18}));r.rotation.set(Math.random()*2,Math.random()*2,Math.random()*2);group.add(r);rings.push(r)}
+const pts=new THREE.BufferGeometry(),count=900,pos=new Float32Array(count*3);
+for(let i=0;i<count;i++){const a=Math.random()*Math.PI*2,b=Math.acos(2*Math.random()-1),rad=3+Math.random()*4;pos[i*3]=rad*Math.sin(b)*Math.cos(a);pos[i*3+1]=rad*Math.sin(b)*Math.sin(a);pos[i*3+2]=rad*Math.cos(b)}
+pts.setAttribute('position',new THREE.BufferAttribute(pos,3));
+const stars=new THREE.Points(pts,new THREE.PointsMaterial({color:0xd8ff3e,size:.018,transparent:true,opacity:.42}));scene.add(stars);
+let mx=0,my=0,scroll=0;addEventListener('pointermove',e=>{mx=(e.clientX/innerWidth-.5);my=(e.clientY/innerHeight-.5)},{passive:true});addEventListener('scroll',()=>scroll=scrollY/(document.documentElement.scrollHeight-innerHeight||1),{passive:true});
+function frame(t){const time=t*.00025;group.rotation.x+=.0007;group.rotation.y+=.0012;group.rotation.x+=(-my*.12-group.rotation.x)*.006;group.rotation.z+=(mx*.12-group.rotation.z)*.006;core.rotation.x=-time*1.4;core.rotation.y=time*2.2;rings.forEach((r,i)=>{r.rotation.x+=.001*(i+1);r.rotation.y-=.0007*(i+1);});shell.scale.setScalar(1+scroll*.14);core.scale.setScalar(1+Math.sin(t*.0015)*.035);stars.rotation.y=time*(1+scroll*2);stars.rotation.x=scroll*.5;camera.position.z=8-scroll*1.2;renderer.render(scene,camera);requestAnimationFrame(frame)}requestAnimationFrame(frame);
+addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);renderer.setPixelRatio(Math.min(devicePixelRatio,1.7))});
+</script><div class="scene-tag mono"><i></i><span id="scene-label">SYSTEM / ONLINE</span></div>
 <div class="cursor"></div><div class="scanline"></div><div class="progress"></div>
 <nav class="nav"><div class="navin"><a class="brand" href="#">LUMAROZ<span>.</span></a><div class="navlinks"><a href="#system">System</a><a href="#divisions">Divisions</a><a href="#ren">REN</a><a href="#contact">Contact</a></div><button class="menu mono">Menu</button></div></nav>
 <main>
