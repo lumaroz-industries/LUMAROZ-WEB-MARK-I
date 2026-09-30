@@ -37,6 +37,17 @@ main,.nav,footer{position:relative;z-index:2}.hero-content,.chapter,.split,.ren,
 </style><style>
 .section-flash{position:fixed;inset:0;z-index:48;pointer-events:none;background:radial-gradient(circle at 50% 50%,rgba(216,255,62,.16),transparent 38%);opacity:0}
 .section-flash.pulse{animation:flash .65s cubic-bezier(.16,1,.3,1)}@keyframes flash{0%{opacity:0}18%{opacity:1}100%{opacity:0}}
+</style><style>
+/* REN CINEMATIC SCENE */
+.ren{overflow:hidden;isolation:isolate;background:radial-gradient(circle at 50% 50%,rgba(139,92,246,.07),transparent 42%)}
+.ren:before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent 49.9%,rgba(216,255,62,.06) 50%,transparent 50.1%),linear-gradient(0deg,transparent 49.9%,rgba(216,255,62,.06) 50%,transparent 50.1%);background-size:90px 90px;mask-image:radial-gradient(circle,black,transparent 68%);opacity:.35}
+.ren-interface{position:absolute;inset:8%;pointer-events:none;z-index:3}.ren-node{position:absolute;border:1px solid rgba(255,255,255,.12);background:rgba(5,5,6,.42);backdrop-filter:blur(12px);padding:12px 14px;min-width:145px;opacity:.72;transition:.35s}.ren-node strong{display:block;font-size:12px;margin:7px 0}.ren-node span{font:10px "DM Mono",monospace;color:#777}.ren-node.a{left:0;top:25%}.ren-node.b{right:0;top:15%}.ren-node.c{right:4%;bottom:22%}.ren-node.d{left:8%;bottom:14%}.ren-node:after{content:"";position:absolute;width:5px;height:5px;border-radius:50%;background:var(--hot);right:8px;top:8px;box-shadow:0 0 15px var(--hot)}
+.ren-node:hover{transform:translateY(-6px);border-color:rgba(216,255,62,.4);opacity:1}.ren-status{position:absolute;left:50%;top:8%;transform:translateX(-50%);display:flex;gap:12px;align-items:center}.ren-status b{width:7px;height:7px;border-radius:50%;background:var(--hot);box-shadow:0 0 20px var(--hot)}
+.ren-word{z-index:5;text-shadow:0 0 80px rgba(216,255,62,.08);cursor:default}.ren-word:after{content:"";position:absolute;inset:-12%;border:1px solid rgba(216,255,62,.08);border-radius:50%;transform:scale(.7);transition:transform .8s cubic-bezier(.16,1,.3,1)}.ren:hover .ren-word:after{transform:scale(1)}
+.ren-scan{position:absolute;left:0;right:0;top:18%;height:1px;background:linear-gradient(90deg,transparent,var(--hot),transparent);opacity:.18;animation:renscan 4s ease-in-out infinite}@keyframes renscan{0%,100%{transform:translateY(-20vh)}50%{transform:translateY(55vh)}}
+.ren-terminal{position:absolute;left:50%;bottom:14%;transform:translateX(-50%);color:#5f5f59;white-space:nowrap}.ren-terminal b{color:var(--hot);font-weight:400}
+.ren-enter{position:absolute;top:17%;right:7%;color:#666}.ren-enter:before{content:"";display:inline-block;width:28px;height:1px;background:var(--hot);vertical-align:middle;margin-right:10px}
+@media(max-width:800px){.ren-interface{inset:4%}.ren-node{min-width:110px;padding:9px;font-size:10px}.ren-node.a{left:-10px}.ren-node.b{right:-10px}.ren-node.c{right:-10px}.ren-node.d{left:-10px}.ren-terminal{bottom:10%;font-size:9px}.ren-enter{right:4%;top:12%}}
 </style></head>
 <body><canvas id="particle-field"></canvas><canvas id="webgl-scene" aria-hidden="true"></canvas>
 <style>
@@ -76,7 +87,16 @@ addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updat
 <section class="chapter system" id="system"><div class="wrap"><div class="chapter-head reveal"><div class="chapter-num mono">01 / The system</div><div><h2 class="chapter-title">NOT A<br><em>COMPANY.</em><br>A SYSTEM.</h2><p class="statement">Ideas become software. Software becomes products. Products become environments. We build across the entire chain.</p></div></div><div class="system-stage"><div class="orb"><div class="orbit"></div><div class="coreword"><small class="mono">Lumaroz Intelligence</small><strong>THINK<br>FORWARD</strong></div></div><div data-magnetic class="float-card one"><span class="mono">01 — Intelligence</span><strong>REN</strong><p>An AI companion evolving from interface into infrastructure.</p></div><div data-magnetic class="float-card two"><span class="mono">02 — Tools</span><strong>Software</strong><p>Utilities and intelligent products designed around real workflows.</p></div><div data-magnetic class="float-card three"><span class="mono">03 — Objects</span><strong>Store</strong><p>Physical technology that belongs on the same desk as the future.</p></div></div></div></section>
 <section class="chapter" id="divisions"><div class="wrap"><div class="chapter-head reveal"><div class="chapter-num mono">02 / Divisions</div><div><h2 class="chapter-title">TWO WORLDS.<br><em>ONE ENGINE.</em></h2><p class="statement">The intelligence layer and the physical layer are deliberately different — but they feed the same obsession: better tools for humans.</p></div></div><div class="services"><article class="service reveal"><div class="mono">01</div><div><h3>Lumaroz Intelligence</h3><p>AI assistants, intelligent interfaces, experimental systems, and software that feels native to the way people actually think.</p></div><div class="arrow">↗</div></article><article class="service reveal"><div class="mono">02</div><div><h3>Lumaroz Store</h3><p>Keyboards, mice, speakers, desk technology, and carefully selected objects for people who care about their workspace.</p></div><div class="arrow">↗</div></article></div></div></section>
 <section class="split"><div class="split-panel"><div class="split-label">The digital layer / 01</div><h2 class="split-title">MACHINES<br>THAT<br>ADAPT.</h2><p class="split-copy">Software should disappear into the workflow. We design systems that listen, understand, react, and get out of the way.</p></div><div class="split-panel"><div class="split-label">The physical layer / 02</div><h2 class="split-title">OBJECTS<br>WITH<br>INTENT.</h2><p class="split-copy">The desk is an interface too. Every object is an opportunity to remove friction, add character, and make work feel better.</p></div></section>
-<section class="ren" id="ren"><div class="ren-ring"></div><div class="mono" style="position:absolute;top:12%;left:50%;transform:translateX(-50%);color:#555">LUMAROZ / CORE-01</div><div class="ren-word reveal">REN</div><div class="ren-meta mono">A LUMAROZ SYSTEM / AI COMPANION / EVOLVING</div></section>
+<section class="ren" id="ren"><div class="ren-interface">
+<div class="ren-status mono"><b></b><span>REN CORE / ONLINE</span></div>
+<div class="ren-enter mono">LUMAROZ INTELLIGENCE</div>
+<div class="ren-node a"><span>01 / PERCEPTION</span><strong>LISTENING</strong><span>signal acquisition · active</span></div>
+<div class="ren-node b"><span>02 / COGNITION</span><strong>THINKING</strong><span>context engine · active</span></div>
+<div class="ren-node c"><span>03 / ACTION</span><strong>READY</strong><span>tool interface · armed</span></div>
+<div class="ren-node d"><span>04 / MEMORY</span><strong>EVOLVING</strong><span>personal context · linked</span></div>
+</div>
+<div class="ren-scan"></div>
+<div class="ren-terminal mono">&gt; REN / <b>INITIALIZED</b> / LUMAROZ SYSTEM</div><div class="ren-ring"></div><div class="mono" style="position:absolute;top:12%;left:50%;transform:translateX(-50%);color:#555">LUMAROZ / CORE-01</div><div class="ren-word reveal">REN</div><div class="ren-meta mono">A LUMAROZ SYSTEM / AI COMPANION / EVOLVING</div></section>
 <section class="cta" id="contact"><div class="wrap"><div class="mono reveal">03 / Continue</div><h2 class="reveal">THE FUTURE<br>IS <span>UNFINISHED.</span></h2><p class="reveal">Lumaroz exists to keep it that way. Explore the work, follow the experiments, or build something with us.</p><a data-magnetic class="cta-btn reveal" href="mailto:hello@lumaroz.com">Start a conversation <span>↗</span></a></div></section>
 </main>
 <footer class="wrap"><span>© 2026 LUMAROZ INDUSTRIES PVT. LTD.</span><span>INTELLIGENCE / SYSTEMS / OBJECTS</span></footer>
@@ -104,4 +124,10 @@ const sections=[...document.querySelectorAll('section[id]')];const obs=new Inter
 })();
 </script><script>
 (()=>{const flash=document.querySelector('.section-flash');document.querySelectorAll('section[id]').forEach(s=>new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){flash.classList.remove('pulse');void flash.offsetWidth;flash.classList.add('pulse')}}),{threshold:.75}).observe(s))})();
+</script><script>
+(()=>{const scene=document.querySelector('.ren'),word=document.querySelector('.ren-word'),nodes=[...document.querySelectorAll('.ren-node')];if(!scene||!word)return;let tx=0,ty=0,x=0,y=0;
+scene.addEventListener('pointermove',e=>{const r=scene.getBoundingClientRect();tx=(e.clientX-r.left)/r.width-.5;ty=(e.clientY-r.top)/r.height-.5},{passive:true});
+scene.addEventListener('pointerleave',()=>{tx=0;ty=0});
+function tick(){x+=(tx-x)*.045;y+=(ty-y)*.045;word.style.transform='translate3d('+(x*24)+'px,'+(y*18)+'px,0)';nodes.forEach((n,i)=>n.style.transform='translate3d('+(x*(i+1)*10)+'px,'+(y*(i+1)*7)+'px,0)');requestAnimationFrame(tick)}tick();
+})();
 </script></body></html>
