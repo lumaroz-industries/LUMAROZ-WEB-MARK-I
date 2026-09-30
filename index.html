@@ -26,8 +26,16 @@ a{color:inherit;text-decoration:none}button{font:inherit;color:inherit;backgroun
 .split-panel{isolation:isolate}.split-panel .split-title{will-change:transform}.ren-word{filter:drop-shadow(0 0 45px rgba(216,255,62,.08))}
 .scanline{position:absolute;left:0;right:0;top:0;height:1px;background:rgba(216,255,62,.5);box-shadow:0 0 18px rgba(216,255,62,.5);animation:scanline 5s linear infinite;opacity:.35}@keyframes scanline{from{transform:translateY(0)}to{transform:translateY(100vh)}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+</style><style>
+/* MARK-I / visual engine */
+#particle-field{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.8}
+main,.nav,footer{position:relative;z-index:2}.hero-content,.chapter,.split,.ren,.cta{transform-style:preserve-3d}
+.scene-tag{position:fixed;right:28px;bottom:24px;z-index:20;mix-blend-mode:difference;display:flex;gap:10px;align-items:center}.scene-tag i{width:7px;height:7px;border-radius:50%;background:var(--hot);box-shadow:0 0 16px var(--hot)}
+.chapter:before{content:"";position:absolute;left:0;right:0;top:50%;height:1px;background:linear-gradient(90deg,transparent,rgba(216,255,62,.16),transparent);pointer-events:none}
+.service h3,.split-title,.chapter-title,.cta h2{transition:letter-spacing .45s cubic-bezier(.16,1,.3,1)}.service:hover h3{letter-spacing:-.02em}
+@media(max-width:800px){#particle-field{opacity:.35}.scene-tag{right:16px;bottom:16px}}
 </style></head>
-<body>
+<body><canvas id="particle-field"></canvas><div class="scene-tag mono"><i></i><span id="scene-label">SYSTEM / ONLINE</span></div>
 <div class="cursor"></div><div class="scanline"></div><div class="progress"></div>
 <nav class="nav"><div class="navin"><a class="brand" href="#">LUMAROZ<span>.</span></a><div class="navlinks"><a href="#system">System</a><a href="#divisions">Divisions</a><a href="#ren">REN</a><a href="#contact">Contact</a></div><button class="menu mono">Menu</button></div></nav>
 <main>
@@ -54,5 +62,12 @@ addEventListener('pointermove',e=>{tx=(e.clientX/innerWidth-.5);ty=(e.clientY/in
 function raf(){cx+=(tx-cx)*.06;cy+=(ty-cy)*.06;if(hero){hero.style.setProperty('--mx',cx*20+'%');hero.style.setProperty('--my',cy*20+'%');title.forEach((x,i)=>x.style.transform='translate3d('+cx*(i+1)*8+'px,'+cy*(i+1)*5+'px,0)')}requestAnimationFrame(raf)}raf();
 const onScroll=()=>{const y=scrollY;panels.forEach((p,i)=>{const r=p.getBoundingClientRect(),q=(innerHeight/2-(r.top+r.height/2))/innerHeight;p.querySelector('.split-title').style.transform='translate3d('+(q*(i?18:-18))+'px,'+(q*-28)+'px,0)';});if(ren){const r=ren.getBoundingClientRect(),q=(innerHeight/2-(r.top+r.height/2))/innerHeight;ren.style.transform='translate3d(0,'+(q*55)+'px,0) rotate('+q*4+'deg)';}if(orb){const r=document.querySelector('.system').getBoundingClientRect();const p=Math.max(0,Math.min(1,(innerHeight-r.top)/(r.height+innerHeight)));orb.style.transform='rotateX('+(65-p*35)+'deg) rotateZ('+(p*180)+'deg) scale('+(1+p*.1)+')';}};addEventListener('scroll',onScroll,{passive:true});onScroll();
 document.querySelectorAll('[data-magnetic]').forEach(el=>{el.addEventListener('pointermove',e=>{const r=el.getBoundingClientRect();const x=(e.clientX-r.left-r.width/2)*.18,y=(e.clientY-r.top-r.height/2)*.18;el.style.transform='translate3d('+x+'px,'+y+'px,0)'});el.addEventListener('pointerleave',()=>el.style.transform='')});
+})();
+</script><script>
+(()=>{const canvas=document.getElementById('particle-field'),ctx=canvas.getContext('2d'),label=document.getElementById('scene-label');let w,h,dpr,pts=[],mx=innerWidth/2,my=innerHeight/2,smx=mx,smy=my;
+const colors=['216,255,62','139,92,246','101,231,255'];
+function resize(){dpr=Math.min(devicePixelRatio||1,2);w=innerWidth;h=innerHeight;canvas.width=w*dpr;canvas.height=h*dpr;canvas.style.width=w+'px';canvas.style.height=h+'px';ctx.setTransform(dpr,0,0,dpr,0,0);pts=Array.from({length:Math.min(180,Math.floor(w*h/9000))},()=>({x:Math.random()*w,y:Math.random()*h,z:.2+Math.random()*.9,r:.4+Math.random()*1.8,vx:(Math.random()-.5)*.16,vy:(Math.random()-.5)*.16,c:colors[Math.floor(Math.random()*colors.length)]}))}resize();addEventListener('resize',resize);addEventListener('pointermove',e=>{mx=e.clientX;my=e.clientY},{passive:true});
+function draw(){smx+=(mx-smx)*.035;smy+=(my-smy)*.035;ctx.clearRect(0,0,w,h);const sy=scrollY/(document.documentElement.scrollHeight-innerHeight||1);pts.forEach((p,i)=>{p.x+=p.vx;p.y+=p.vy;if(p.x<0)p.x=w;if(p.x>w)p.x=0;if(p.y<0)p.y=h;if(p.y>h)p.y=0;const dx=smx-p.x,dy=smy-p.y,dist=Math.hypot(dx,dy);if(dist<150){p.x-=dx/dist*(150-dist)*.008;p.y-=dy/dist*(150-dist)*.008}const depth=.55+p.z*.55;let yy=(p.y+sy*h*.35*p.z)%h;ctx.fillStyle='rgba('+p.c+','+(.15+p.z*.45)+')';ctx.beginPath();ctx.arc(p.x,yy,p.r*depth,0,Math.PI*2);ctx.fill();if(i%7===0){ctx.strokeStyle='rgba(255,255,255,.025)';ctx.beginPath();ctx.moveTo(p.x,yy);ctx.lineTo(p.x+(smx-p.x)*.05,yy+(smy-yy)*.05);ctx.stroke()}});requestAnimationFrame(draw)}draw();
+const sections=[...document.querySelectorAll('section[id]')];const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){const n=e.target.id;label.textContent=n==='top'?'SYSTEM / ONLINE':n.toUpperCase()+' / 2026'}}),{threshold:.45});sections.forEach(s=>obs.observe(s));
 })();
 </script></body></html>
