@@ -1,3 +1,9 @@
+## Demo preview
+
+**Live preview:** `https://YOUR-PROJECT.pages.dev`
+
+> Replace `YOUR-PROJECT` with the actual Cloudflare Pages project subdomain after the first successful deployment. This is a placeholder, not a live demo URL yet.
+
 # LUMAROZ INDUSTRIES — Official Website
 
 Multi-page corporate website for Lumaroz Industries Pvt. Ltd.
